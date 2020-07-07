@@ -1,0 +1,7 @@
+.suggestion-button {
+
+    -fx-background-color: #2c5364;
+    -fx-background-radius: 15px;
+    -jfx-button-type: RAISED;
+
+}

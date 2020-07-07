@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1300.0" stylesheets="@../CSS/Background.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <children>
+      <Text layoutX="441.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white;" text="Auto Complete">
+         <font>
+            <Font name="Padauk Bold" size="64.0" />
+         </font>
+      </Text>
+      <JFXButton fx:id="suggestionOne" layoutX="266.0" layoutY="521.0" prefHeight="74.0" prefWidth="168.0" ripplerFill="#37728a" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="1" textFill="WHITE" />
+      <JFXButton fx:id="suggestionOTwo" layoutX="466.0" layoutY="521.0" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="2" textFill="WHITE" />
+      <JFXButton fx:id="suggestionThree" layoutX="666.0" layoutY="521.0" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="3" textFill="WHITE" />
+      <JFXButton fx:id="suggestionFour" layoutX="866.0" layoutY="521.0" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="4" textFill="WHITE" />
+      <JFXTextField fx:id="mainTextField" focusColor="#2c5364" labelFloat="true" layoutX="252.0" layoutY="649.0" prefHeight="26.0" prefWidth="795.0" promptText="Write here" style="-fx-text-inner-color: white;" unFocusColor="#aeabab">
+         <font>
+            <Font size="24.0" />
+         </font></JFXTextField>
+      <JFXButton fx:id="buttonNext" layoutX="63.0" layoutY="519.0" onAction="#nextSuggestionsAction" prefHeight="31.0" prefWidth="80.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="Next" textFill="WHITE" />
+      <JFXTextArea fx:id="resultTextArea" editable="false" focusColor="#2d5363" layoutX="112.0" layoutY="161.0" prefHeight="287.0" prefWidth="1076.0" promptText="This is the Result Text Area" style="-fx-text-inner-color: white;" unFocusColor="#adacac">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXTextArea>
+      <JFXButton fx:id="buttonCopy" layoutX="1216.0" layoutY="277.0" onAction="#copyAction" prefHeight="38.0" prefWidth="54.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="Copy" textFill="WHITE" />
+      <JFXButton fx:id="buttonClear" layoutX="1216.0" layoutY="328.0" onAction="#clearAction" prefHeight="38.0" prefWidth="54.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="Clear" textFill="WHITE" />
+      <JFXCheckBox fx:id="editableCheckBox" checkedColor="#4199bc" layoutX="1203.0" layoutY="243.0" onAction="#toggleEditable" text="Editable" textFill="WHITE" />
+      <JFXButton fx:id="buttonPrevious" layoutX="63.0" layoutY="566.0" onAction="#previousSuggestionsAction" prefHeight="31.0" prefWidth="80.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="Previous" textFill="WHITE" />
+   </children>
+</AnchorPane>
