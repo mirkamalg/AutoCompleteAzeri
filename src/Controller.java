@@ -22,7 +22,7 @@ public class Controller implements Initializable {
     private JFXButton suggestionOne;
 
     @FXML
-    private JFXButton suggestionOTwo;
+    private JFXButton suggestionTwo;
 
     @FXML
     private JFXButton suggestionThree;
@@ -65,9 +65,7 @@ public class Controller implements Initializable {
     }
 
     public void copyAction(ActionEvent actionEvent) {
-        StringSelection stringSelection = new StringSelection(resultTextArea.getText());
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, null);
+        copyToClipBoard(resultTextArea.getText());
     }
 
     private void setUpDataBase() {
@@ -100,7 +98,7 @@ public class Controller implements Initializable {
                             //If empty, reset suggestion buttons
                             if (newValue.isEmpty()) {
                                 suggestionOne.setText("1");
-                                suggestionOTwo.setText("2");
+                                suggestionTwo.setText("2");
                                 suggestionThree.setText("3");
                                 suggestionFour.setText("4");
                             } else {
@@ -137,9 +135,9 @@ public class Controller implements Initializable {
         }
 
         try {
-            suggestionOTwo.setText(results.get(minSuggestionIndex + 1));
+            suggestionTwo.setText(results.get(minSuggestionIndex + 1));
         }catch (IndexOutOfBoundsException e) {
-            suggestionOTwo.setText("2");
+            suggestionTwo.setText("2");
         }
 
         try {
@@ -167,5 +165,64 @@ public class Controller implements Initializable {
             minSuggestionIndex -= 4;
             setSuggestions();
         }
+    }
+
+    public void suggestionOneClicked(ActionEvent actionEvent) {
+        String suggestion = suggestionOne.getText();
+        if (!suggestion.equals("1")) {
+            applyCompletion(suggestion);
+            copyToClipBoard(suggestion);
+        }
+    }
+
+    public void suggestionTwoClicked(ActionEvent actionEvent) {
+        String suggestion = suggestionTwo.getText();
+        if (!suggestion.equals("2")) {
+            applyCompletion(suggestion);
+            copyToClipBoard(suggestion);
+        }
+    }
+
+    public void suggestionThreeClicked(ActionEvent actionEvent) {
+        String suggestion = suggestionThree.getText();
+        if (!suggestion.equals("3")) {
+            applyCompletion(suggestion);
+            copyToClipBoard(suggestion);
+        }
+    }
+
+    public void suggestionFourClicked(ActionEvent actionEvent) {
+        String suggestion = suggestionFour.getText();
+        if (!suggestion.equals("4")) {
+            applyCompletion(suggestion);
+            copyToClipBoard(suggestion);
+        }
+    }
+
+    private void applyCompletion(String chosenSuggestion) {
+        //TODO Find a better way for completions
+
+        String text = mainTextField.getText();
+        String[] words = text.split(" ");
+
+        String newText = text.replace(words[words.length - 1], chosenSuggestion);
+        resultTextArea.setText(resultTextArea.getText() + newText + " ");
+        mainTextField.clear();
+    }
+
+    private void copyToClipBoard(String text) {
+        Task task = new Task<Void>() {
+
+            @Override public Void call() {
+
+                StringSelection stringSelection = new StringSelection(text);
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection, null);
+
+                return null;
+            }
+        };
+
+        new Thread(task).start();
     }
 }

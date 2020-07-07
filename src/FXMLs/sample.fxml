@@ -11,10 +11,10 @@
             <Font name="Padauk Bold" size="64.0" />
          </font>
       </Text>
-      <JFXButton fx:id="suggestionOne" layoutX="266.0" layoutY="521.0" prefHeight="74.0" prefWidth="168.0" ripplerFill="#37728a" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="1" textFill="WHITE" />
-      <JFXButton fx:id="suggestionOTwo" layoutX="466.0" layoutY="521.0" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="2" textFill="WHITE" />
-      <JFXButton fx:id="suggestionThree" layoutX="666.0" layoutY="521.0" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="3" textFill="WHITE" />
-      <JFXButton fx:id="suggestionFour" layoutX="866.0" layoutY="521.0" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="4" textFill="WHITE" />
+      <JFXButton fx:id="suggestionOne" layoutX="266.0" layoutY="521.0" onAction="#suggestionOneClicked" prefHeight="74.0" prefWidth="168.0" ripplerFill="#37728a" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="1" textFill="WHITE" />
+      <JFXButton fx:id="suggestionTwo" layoutX="466.0" layoutY="521.0" onAction="#suggestionTwoClicked" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="2" textFill="WHITE" />
+      <JFXButton fx:id="suggestionThree" layoutX="666.0" layoutY="521.0" onAction="#suggestionThreeClicked" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="3" textFill="WHITE" />
+      <JFXButton fx:id="suggestionFour" layoutX="866.0" layoutY="521.0" onAction="#suggestionFourClicked" prefHeight="74.0" prefWidth="168.0" ripplerFill="#38738c" styleClass="suggestion-button" stylesheets="@../CSS/Buttons.css" text="4" textFill="WHITE" />
       <JFXTextField fx:id="mainTextField" focusColor="#2c5364" labelFloat="true" layoutX="252.0" layoutY="649.0" prefHeight="26.0" prefWidth="795.0" promptText="Write here" style="-fx-text-inner-color: white;" unFocusColor="#aeabab">
          <font>
             <Font size="24.0" />
