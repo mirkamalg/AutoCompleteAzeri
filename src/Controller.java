@@ -145,8 +145,10 @@ public class Controller implements Initializable {
     }
 
     public void nextSuggestionsAction(ActionEvent actionEvent) {
-        minSuggestionIndex += 4;
-        setSuggestions();
+        if (!suggestionFour.getText().equals("4")) {  // Change only if there are more words to be shown
+            minSuggestionIndex += 4;
+            setSuggestions();
+        }
     }
 
     public void previousSuggestionsAction(ActionEvent actionEvent) {
