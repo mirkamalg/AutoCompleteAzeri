@@ -97,16 +97,24 @@ public class Controller implements Initializable {
                         @Override
                         public void run() {
 
-                            //Manipulate the text and search for only the last word piece
-                            String[] words = newValue.split(" ");
+                            //If empty, reset suggestion buttons
+                            if (newValue.isEmpty()) {
+                                suggestionOne.setText("1");
+                                suggestionOTwo.setText("2");
+                                suggestionThree.setText("3");
+                                suggestionFour.setText("4");
+                            } else {
+                                //Manipulate the text and search for only the last word piece
+                                String[] words = newValue.split(" ");
 
-                            //Get results
-                            results = dataBase.getData().keySet().stream().filter(p -> p.startsWith(words[words.length - 1])).collect(Collectors.toList());
+                                //Get results
+                                results = dataBase.getData().keySet().stream().filter(p -> p.startsWith(words[words.length - 1])).collect(Collectors.toList());
 
-                            //Sort results (shortest to longest)
-                            results.sort(new Comparator());
+                                //Sort results (shortest to longest)
+                                results.sort(new Comparator());
 
-                            setSuggestions();
+                                setSuggestions();
+                            }
 
 
                         }
