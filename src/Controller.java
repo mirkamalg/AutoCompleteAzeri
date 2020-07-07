@@ -97,8 +97,11 @@ public class Controller implements Initializable {
                         @Override
                         public void run() {
 
+                            //Manipulate the text and search for only the last word piece
+                            String[] words = newValue.split(" ");
+
                             //Get results
-                            results = dataBase.getData().keySet().stream().filter(p -> p.startsWith(newValue)).collect(Collectors.toList());
+                            results = dataBase.getData().keySet().stream().filter(p -> p.startsWith(words[words.length - 1])).collect(Collectors.toList());
 
                             //Sort results (shortest to longest)
                             results.sort(new Comparator());
