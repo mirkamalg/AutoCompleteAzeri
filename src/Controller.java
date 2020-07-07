@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -71,9 +72,10 @@ public class Controller implements Initializable {
     private void setUpDataBase() {
         Task task = new Task<Void>() {
 
-            @Override public Void call() {
+            @Override public Void call() throws SQLException {
 
                 dataBase = DataBase.getInstance();
+                dataBase.closeConnection();
 
                 return null;
             }

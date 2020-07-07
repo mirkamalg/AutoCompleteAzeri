@@ -51,4 +51,8 @@ public class DataBase {
         con = DriverManager.getConnection("jdbc:sqlite:database.db");
     }
 
+    public void closeConnection() throws SQLException {
+        con.close();
+    }
+
 }
