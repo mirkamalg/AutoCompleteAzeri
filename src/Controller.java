@@ -11,13 +11,12 @@ import javafx.fxml.Initializable;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class Controller implements Initializable {
@@ -191,36 +190,41 @@ public class Controller implements Initializable {
         }
     }
 
-    public void suggestionOneClicked(ActionEvent actionEvent) {
+    public void suggestionOneClicked(ActionEvent actionEvent) throws IOException {
         String suggestion = suggestionOne.getText();
         if (!suggestion.equals("1")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
         }
+
+        saveToFile(suggestion);
     }
 
-    public void suggestionTwoClicked(ActionEvent actionEvent) {
+    public void suggestionTwoClicked(ActionEvent actionEvent) throws IOException {
         String suggestion = suggestionTwo.getText();
         if (!suggestion.equals("2")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
         }
+        saveToFile(suggestion);
     }
 
-    public void suggestionThreeClicked(ActionEvent actionEvent) {
+    public void suggestionThreeClicked(ActionEvent actionEvent) throws IOException {
         String suggestion = suggestionThree.getText();
         if (!suggestion.equals("3")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
         }
+        saveToFile(suggestion);
     }
 
-    public void suggestionFourClicked(ActionEvent actionEvent) {
+    public void suggestionFourClicked(ActionEvent actionEvent) throws IOException {
         String suggestion = suggestionFour.getText();
         if (!suggestion.equals("4")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
         }
+        saveToFile(suggestion);
     }
 
     private void applyCompletion(String chosenSuggestion) {
@@ -256,9 +260,28 @@ public class Controller implements Initializable {
         dataBase.getData().put(suggestion, dataBase.getData().get(suggestion) + 1);
 
         //  Write changes to a file
+        AtomicReference<String> writtenFileReference = new AtomicReference<>("");
 
+        Task task = new Task<Void>() {
 
+            @Override public Void call() throws IOException {
 
+                dataBase.getData().forEach((word, point) -> {
+                    if (point > 0) {
+                        String addition = word + "=" + point + " ";
+                        writtenFileReference.set(writtenFileReference.get() + addition);
+                    }
+                });
+
+                Writer writer = new BufferedWriter(new FileWriter("frequency.txt"));
+                writer.write(writtenFileReference.get());
+                writer.close();
+
+                return null;
+            }
+        };
+
+        new Thread(task).start();
 
     }
 
@@ -285,7 +308,6 @@ public class Controller implements Initializable {
         };
 
         new Thread(task).start();
-
 
     }
 }
