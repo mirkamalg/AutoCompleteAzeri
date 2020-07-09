@@ -11,6 +11,9 @@ import javafx.fxml.Initializable;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -50,8 +53,26 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         setUpDataBase();
+
+        try {                              //  UI Thread must sleep in order to wait for other threads to finish their tasks
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         setUpLogic();
 
+        try {
+            readWordFrequencies();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {                            //  Yes, twice *sight*
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 //        dataBase.getData().forEach((word, point) -> System.out.println(word + " === " + point));
 
@@ -104,6 +125,7 @@ public class Controller implements Initializable {
                                 suggestionThree.setText("3");
                                 suggestionFour.setText("4");
                             } else {
+                                //TODO Write learning frequently used word suggestion
                                 //Manipulate the text and search for only the last word piece
                                 String[] words = newValue.split(" ");
 
@@ -226,5 +248,44 @@ public class Controller implements Initializable {
         };
 
         new Thread(task).start();
+    }
+
+    private void saveToFile(String suggestion) throws IOException { // Adds a 'point' to the passed word and writes changes to a file
+
+        //  Add point to database object
+        dataBase.getData().put(suggestion, dataBase.getData().get(suggestion) + 1);
+
+        //  Write changes to a file
+
+
+
+
+    }
+
+    private void readWordFrequencies() throws IOException {
+
+        Task task = new Task<Void>() {
+
+            @Override public Void call() throws IOException {
+
+                BufferedReader reader = new BufferedReader(new FileReader("frequency.txt"));
+                String readData = reader.readLine();
+
+                //  Process the data
+                String[] pairs = readData.split(" ");
+
+                //Iterate through pairs and update word points in database
+                for (String pair:pairs) {
+                    String[] wordAndPoint = pair.split("=");
+                    dataBase.getData().put(wordAndPoint[0], Integer.parseInt(wordAndPoint[1]));
+                }
+
+                return null;
+            }
+        };
+
+        new Thread(task).start();
+
+
     }
 }
