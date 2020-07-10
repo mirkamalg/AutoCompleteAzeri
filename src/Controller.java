@@ -287,27 +287,32 @@ public class Controller implements Initializable {
 
     private void readWordFrequencies() throws IOException {
 
-        Task task = new Task<Void>() {
+        File file = new File("frequency.txt");
+        if (file.exists()) {
 
-            @Override public Void call() throws IOException {
+            Task task = new Task<Void>() {
 
-                BufferedReader reader = new BufferedReader(new FileReader("frequency.txt"));
-                String readData = reader.readLine();
+                @Override public Void call() throws IOException {
 
-                //  Process the data
-                String[] pairs = readData.split(" ");
+                    BufferedReader reader = new BufferedReader(new FileReader("frequency.txt"));
+                    String readData = reader.readLine();
 
-                //Iterate through pairs and update word points in database
-                for (String pair:pairs) {
-                    String[] wordAndPoint = pair.split("=");
-                    dataBase.getData().put(wordAndPoint[0], Integer.parseInt(wordAndPoint[1]));
+                    //  Process the data
+                    String[] pairs = readData.split(" ");
+
+                    //Iterate through pairs and update word points in database
+                    for (String pair:pairs) {
+                        String[] wordAndPoint = pair.split("=");
+                        dataBase.getData().put(wordAndPoint[0], Integer.parseInt(wordAndPoint[1]));
+                    }
+
+                    return null;
                 }
+            };
 
-                return null;
-            }
-        };
+            new Thread(task).start();
 
-        new Thread(task).start();
+        }
 
     }
 }
