@@ -214,6 +214,8 @@ public class Controller implements Initializable {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
 
+            updateFrequency(suggestion);
+
             saveToFile(suggestion);
         }
     }
@@ -223,6 +225,8 @@ public class Controller implements Initializable {
         if (!suggestion.equals("2")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
+
+            updateFrequency(suggestion);
 
             saveToFile(suggestion);
         }
@@ -234,6 +238,8 @@ public class Controller implements Initializable {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
 
+            updateFrequency(suggestion);
+
             saveToFile(suggestion);
         }
     }
@@ -243,6 +249,8 @@ public class Controller implements Initializable {
         if (!suggestion.equals("4")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
+
+            updateFrequency(suggestion);
 
             saveToFile(suggestion);
         }
@@ -363,4 +371,12 @@ public class Controller implements Initializable {
         frequencyList.clear();
         frequencyList.addAll(checkedWords);
     }
+
+    private void updateFrequency(String suggestion) {  //Adds selected suggestions to frequencyList and improves suggestions without app restart.
+
+        frequencyList.add(suggestion);
+
+    }
+
+    //TODO learning takes effect only after reopening the app. FIX
 }
