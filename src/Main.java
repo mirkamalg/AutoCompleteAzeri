@@ -10,6 +10,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("FXMLs/sample.fxml"));
         primaryStage.setTitle("Auto Complete");
+        primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root, 1300, 750));
         primaryStage.show();
     }
