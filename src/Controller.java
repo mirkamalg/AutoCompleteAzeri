@@ -14,6 +14,8 @@ import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
@@ -45,6 +47,8 @@ public class Controller implements Initializable {
     DataBase dataBase;
 
     private List<String> results;
+
+    private List<String> frequencyList = new ArrayList<>();
 
     private int minSuggestionIndex;
 
@@ -92,7 +96,8 @@ public class Controller implements Initializable {
     private void setUpDataBase() {
         Task task = new Task<Void>() {
 
-            @Override public Void call() throws SQLException {
+            @Override
+            public Void call() throws SQLException {
 
                 dataBase = DataBase.getInstance();
                 dataBase.closeConnection();
@@ -111,7 +116,8 @@ public class Controller implements Initializable {
 
             Task task = new Task<Void>() {
 
-                @Override public Void call() {
+                @Override
+                public Void call() {
 
                     Platform.runLater(new Runnable() {
                         @Override
@@ -124,7 +130,6 @@ public class Controller implements Initializable {
                                 suggestionThree.setText("3");
                                 suggestionFour.setText("4");
                             } else {
-                                //TODO Write learning frequently used word suggestion
                                 //Manipulate the text and search for only the last word piece
                                 String[] words = newValue.split(" ");
 
@@ -133,6 +138,19 @@ public class Controller implements Initializable {
 
                                 //Sort results (shortest to longest)
                                 results.sort(new Comparator());
+
+                                //Adjust "results" list using data from "frequencyList"
+
+                                sortByFrequency();
+
+                                if (!frequencyList.isEmpty()) {
+                                    frequencyList.forEach(word -> {
+                                        if (results.contains(word)) {
+                                            results.remove(word);
+                                            results.add(0, word);
+                                        }
+                                    });
+                                }
 
                                 setSuggestions();
                             }
@@ -153,25 +171,25 @@ public class Controller implements Initializable {
     private void setSuggestions() {  // Try to set words to buttons, set numbers is any exception is thrown
         try {
             suggestionOne.setText(results.get(minSuggestionIndex));
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             suggestionOne.setText("1");
         }
 
         try {
             suggestionTwo.setText(results.get(minSuggestionIndex + 1));
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             suggestionTwo.setText("2");
         }
 
         try {
             suggestionThree.setText(results.get(minSuggestionIndex + 2));
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             suggestionThree.setText("3");
         }
 
         try {
             suggestionFour.setText(results.get(minSuggestionIndex + 3));
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             suggestionFour.setText("4");
         }
     }
@@ -195,9 +213,9 @@ public class Controller implements Initializable {
         if (!suggestion.equals("1")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
-        }
 
-        saveToFile(suggestion);
+            saveToFile(suggestion);
+        }
     }
 
     public void suggestionTwoClicked(ActionEvent actionEvent) throws IOException {
@@ -205,8 +223,9 @@ public class Controller implements Initializable {
         if (!suggestion.equals("2")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
+
+            saveToFile(suggestion);
         }
-        saveToFile(suggestion);
     }
 
     public void suggestionThreeClicked(ActionEvent actionEvent) throws IOException {
@@ -214,8 +233,9 @@ public class Controller implements Initializable {
         if (!suggestion.equals("3")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
+
+            saveToFile(suggestion);
         }
-        saveToFile(suggestion);
     }
 
     public void suggestionFourClicked(ActionEvent actionEvent) throws IOException {
@@ -223,8 +243,9 @@ public class Controller implements Initializable {
         if (!suggestion.equals("4")) {
             applyCompletion(suggestion);
             copyToClipBoard(suggestion);
+
+            saveToFile(suggestion);
         }
-        saveToFile(suggestion);
     }
 
     private void applyCompletion(String chosenSuggestion) {
@@ -241,7 +262,8 @@ public class Controller implements Initializable {
     private void copyToClipBoard(String text) {
         Task task = new Task<Void>() {
 
-            @Override public Void call() {
+            @Override
+            public Void call() {
 
                 StringSelection stringSelection = new StringSelection(text);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -264,7 +286,8 @@ public class Controller implements Initializable {
 
         Task task = new Task<Void>() {
 
-            @Override public Void call() throws IOException {
+            @Override
+            public Void call() throws IOException {
 
                 dataBase.getData().forEach((word, point) -> {
                     if (point > 0) {
@@ -292,7 +315,8 @@ public class Controller implements Initializable {
 
             Task task = new Task<Void>() {
 
-                @Override public Void call() throws IOException {
+                @Override
+                public Void call() throws IOException {
 
                     BufferedReader reader = new BufferedReader(new FileReader("frequency.txt"));
                     String readData = reader.readLine();
@@ -301,9 +325,11 @@ public class Controller implements Initializable {
                     String[] pairs = readData.split(" ");
 
                     //Iterate through pairs and update word points in database
-                    for (String pair:pairs) {
+                    for (String pair : pairs) {
                         String[] wordAndPoint = pair.split("=");
                         dataBase.getData().put(wordAndPoint[0], Integer.parseInt(wordAndPoint[1]));
+
+                        frequencyList.add(wordAndPoint[0]);  // Add word to frequency list
                     }
 
                     return null;
@@ -314,5 +340,27 @@ public class Controller implements Initializable {
 
         }
 
+    }
+
+    private void sortByFrequency() {  //Sorts "frequencyList" (Most used to the least)
+
+        List<Integer> integers = new ArrayList<>();
+        frequencyList.forEach(word -> integers.add(dataBase.getData().get(word)));
+
+        Collections.sort(integers);
+
+        List<String> checkedWords = new ArrayList<>();  //I frankly have no idea how or why I coded this
+        integers.forEach(integer -> {
+            frequencyList.forEach(word -> {
+                if (!checkedWords.contains(word)) {
+                    if (dataBase.getData().get(word).equals(integer)) {
+                        checkedWords.add(word);
+                    }
+                }
+            });
+        });
+
+        frequencyList.clear();
+        frequencyList.addAll(checkedWords);
     }
 }
